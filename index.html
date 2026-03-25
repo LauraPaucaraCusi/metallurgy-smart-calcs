@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora Metalúrgica</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Calculadora de Recuperación</h1>
+
+        <label>Ley de Cabeza (%)</label>
+        <input type="number" id="cabeza">
+
+        <label>Ley de Concentrado (%)</label>
+        <input type="number" id="concentrado">
+
+        <label>Tonelaje (ton)</label>
+        <input type="number" id="tonelaje">
+
+        <button onclick="calcular()">Calcular</button>
+
+        <h2 id="resultado"></h2>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
