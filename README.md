@@ -1,50 +1,55 @@
 # 🧪 Calculadora de Recuperación Metalúrgica
 
-Aplicación web interactiva que permite calcular la **recuperación metalúrgica (%)** a partir de la ley de cabeza, ley de concentrado y tonelaje procesado.
+Aplicación web interactiva que permite calcular la **recuperación metalúrgica**, estimar el **metal contenido** y visualizar datos mediante gráficos.
 
-## 🚀 Demo
+## 🌐 Demo en línea
 
-(Próximamente con GitHub Pages)
+https://laurapaucaracusi.github.io/calculadora-metalurgica/
 
-## 🛠️ Tecnologías utilizadas
+## 🚀 Tecnologías utilizadas
 
 * HTML
 * CSS
 * JavaScript
+* Chart.js (visualización de datos)
 
 ## 📊 Funcionalidades
 
-* Cálculo automático de recuperación metalúrgica
-* Validación de datos ingresados
-* Control de errores (valores vacíos, negativos o inconsistentes)
-* Interfaz simple y amigable
+* Cálculo de recuperación metalúrgica (%)
+* Cálculo de metal contenido
+* Validación de datos de entrada
+* Visualización gráfica de leyes (cabeza vs concentrado)
+* Interfaz interactiva
+* Botón de limpieza de datos
 
-## 🧠 Lógica del cálculo
+## 🧠 Lógica aplicada
 
-La recuperación se calcula mediante la siguiente fórmula:
+* Recuperación (%) = (Ley Concentrado / Ley Cabeza) * 100
+* Metal contenido = (Ley Cabeza × Tonelaje) / 100
 
-Recuperación (%) = (Ley Concentrado / Ley Cabeza) * 100
+## ⛏️ Aplicación en minería
 
-## 📌 Datos de entrada
+Este tipo de cálculo es utilizado en procesos de **concentración de minerales (flotación)** para:
 
-* Ley de cabeza (%)
-* Ley de concentrado (%)
-* Tonelaje (ton)
+* Evaluar la eficiencia del proceso
+* Analizar el desempeño metalúrgico
+* Apoyar balances metalúrgicos
+* Comparar leyes de alimentación y producto
 
 ## 🎯 Objetivo del proyecto
 
-Este proyecto integra conocimientos de **ingeniería en metalurgia** con desarrollo web, como parte de mi transición hacia el área tecnológica con enfoque en backend.
+Desarrollar una herramienta que integre conocimientos de **ingeniería en metalurgia** con programación, como parte de mi transición hacia el desarrollo de software.
 
 ## 👩‍💻 Sobre mí
 
-Soy Ingeniera en Metalurgia en proceso de transición hacia el desarrollo de software. Me interesa crear soluciones tecnológicas aplicadas a la industria minera, combinando análisis técnico con programación.
+Soy Ingeniera en Metalurgia en proceso de transición hacia el desarrollo de software, con interés en el área backend y en la creación de soluciones tecnológicas aplicadas a la minería.
 
 ## 🔧 Mejoras futuras
 
-* Incorporar gráficos de resultados
-* Agregar historial de cálculos
-* Mejorar diseño UI/UX
-* Migrar a backend (Node.js o Python)
+* Incorporar más variables metalúrgicas
+* Exportación de resultados
+* Historial de cálculos
+* Integración con backend (Node.js o Python)
 
 ## 📌 Estado del proyecto
 
