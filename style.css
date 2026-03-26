@@ -1,0 +1,51 @@
+body {
+    font-family: Arial;
+    background: #0f172a;
+    color: white;
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.container {
+    background: #1e293b;
+    padding: 25px;
+    border-radius: 12px;
+    width: 350px;
+}
+
+h1 {
+    text-align: center;
+}
+
+input, select {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: #38bdf8;
+    border: none;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.btn-limpiar {
+    background: #f87171;
+}
+
+#resultado, #conversion, #infoProceso {
+    margin-top: 10px;
+    padding: 10px;
+    background: #020617;
+    border-radius: 8px;
+}
+
+canvas {
+    margin-top: 15px;
+}

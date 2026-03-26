@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Simulador Metalúrgico</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h1>⛏️ Simulador Metalúrgico</h1>
+
+    <!-- Tipo industria -->
+    <label>Tipo de industria</label>
+    <select id="tipo">
+        <option value="metalica">Minería Metálica</option>
+        <option value="noMetalica">Minería No Metálica</option>
+    </select>
+
+    <!-- Tipo cálculo -->
+    <label>Tipo de cálculo</label>
+    <select id="calculo">
+        <option value="recuperacion">Recuperación</option>
+        <option value="balance">Balance</option>
+    </select>
+
+    <!-- Inputs dinámicos -->
+    <div id="inputs"></div>
+
+    <button onclick="calcular()">Calcular</button>
+    <button onclick="limpiar()" class="btn-limpiar">Limpiar</button>
+
+    <div id="resultado"></div>
+    <canvas id="grafico"></canvas>
+
+    <hr>
+
+    <!-- Conversor -->
+    <h3>🔄 Conversor</h3>
+    <input type="number" id="valor">
+    <select id="unidad">
+        <option value="porcentaje">% </option>
+        <option value="ppm">ppm</option>
+    </select>
+    <button onclick="convertir()">Convertir</button>
+    <div id="conversion"></div>
+
+    <hr>
+
+    <!-- Elementos -->
+    <h3>🧪 Elemento</h3>
+    <select id="elemento" onchange="cargarProcesos()">
+        <option value="">Seleccionar</option>
+        <option value="Cu">Cobre</option>
+        <option value="Ca">Caliza</option>
+        <option value="Na">Sal</option>
+    </select>
+
+    <label>Proceso</label>
+    <select id="proceso" onchange="mostrarProceso()">
+        <option value="">Selecciona proceso</option>
+    </select>
+
+    <div id="infoProceso"></div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
