@@ -1,139 +1,136 @@
-let chart;
 const inputsDiv = document.getElementById("inputs");
 
-document.getElementById("calculo").addEventListener("change", mostrarInputs);
-document.getElementById("tipo").addEventListener("change", mostrarInputs);
+// PROCESOS
+function cargarProcesos() {
+    let el = document.getElementById("elemento").value;
+    let proceso = document.getElementById("proceso");
 
-window.onload = mostrarInputs;
+    proceso.innerHTML = "<option value=''>Selecciona proceso</option>";
 
-// INPUTS
+    if (el === "Cu") {
+        proceso.innerHTML += `<option value="hidro">Hidrometalurgia</option>`;
+        proceso.innerHTML += `<option value="piro">Pirometalurgia</option>`;
+    }
+
+    if (el === "Ca") {
+        proceso.innerHTML += `<option value="cal">Calcinación</option>`;
+    }
+
+    if (el === "Na") {
+        proceso.innerHTML += `<option value="eva">Evaporación</option>`;
+    }
+}
+
+// INPUTS DINÁMICOS
 function mostrarInputs() {
-    let tipo = document.getElementById("tipo").value;
-    let calc = document.getElementById("calculo").value;
+    let el = document.getElementById("elemento").value;
+    let proceso = document.getElementById("proceso").value;
 
     inputsDiv.innerHTML = "";
 
-    if (calc === "recuperacion") {
-        if (tipo === "metalica") {
-            inputsDiv.innerHTML = `
-                <input type="number" id="cabeza" placeholder="Ley cabeza">
-                <input type="number" id="concentrado" placeholder="Ley concentrado">
-            `;
-        } else {
-            inputsDiv.innerHTML = `
-                <input type="number" id="produccion" placeholder="Producción">
-                <input type="number" id="humedad" placeholder="Humedad %">
-            `;
-        }
+    if (el === "Cu" && proceso === "hidro") {
+        inputsDiv.innerHTML = `
+            <input type="number" id="ley" placeholder="Ley cabeza (%)">
+            <input type="number" id="ton" placeholder="Toneladas (t)">
+            <input type="number" id="rec" placeholder="Recuperación (%)">
+            <input type="number" id="acido" placeholder="Ácido (kg)">
+        `;
     }
 
-    if (calc === "balance") {
+    if (el === "Cu" && proceso === "piro") {
         inputsDiv.innerHTML = `
-            <input type="number" id="F" placeholder="Alimentación">
-            <input type="number" id="C" placeholder="Concentrado">
+            <input type="number" id="ley" placeholder="Ley cabeza (%)">
+            <input type="number" id="leyC" placeholder="Ley concentrado (%)">
+            <input type="number" id="ton" placeholder="Toneladas (t)">
+            <input type="number" id="rec" placeholder="Recuperación (%)">
+        `;
+    }
+
+    if (el === "Ca") {
+        inputsDiv.innerHTML = `
+            <input type="number" id="ton" placeholder="Toneladas">
+        `;
+    }
+
+    if (el === "Na") {
+        inputsDiv.innerHTML = `
+            <input type="number" id="ton" placeholder="Producción sal">
         `;
     }
 }
 
-// CALCULO
+// CALCULAR
 function calcular() {
-    let tipo = document.getElementById("tipo").value;
-    let calc = document.getElementById("calculo").value;
+    let el = document.getElementById("elemento").value;
+    let proceso = document.getElementById("proceso").value;
     let res = document.getElementById("resultado");
 
     res.innerHTML = "";
 
-    if (calc === "recuperacion") {
-        if (tipo === "metalica") {
-            let cabeza = parseFloat(cabeza.value);
-            let conc = parseFloat(concentrado.value);
+    // HIDROMETALURGIA
+    if (el === "Cu" && proceso === "hidro") {
+        let ley = parseFloat(document.getElementById("ley").value);
+        let ton = parseFloat(document.getElementById("ton").value);
+        let rec = parseFloat(document.getElementById("rec").value);
+        let acido = parseFloat(document.getElementById("acido").value);
 
-            let rec = (conc / cabeza) * 100;
+        let contenido = ton * (ley / 100);
+        let recuperado = contenido * (rec / 100);
+        let consumo = acido / ton;
 
-            let msg = rec < 60 ? "⚠️ Baja" : rec < 85 ? "✅ Media" : "🚀 Alta";
-
-            res.innerHTML = `Recuperación: ${rec.toFixed(2)}%<br>${msg}`;
-            grafico(["Cabeza","Conc"],[cabeza,conc]);
-        } else {
-            let prod = parseFloat(produccion.value);
-            let hum = parseFloat(humedad.value);
-
-            let seco = prod * (1 - hum/100);
-
-            res.innerHTML = `Producto seco: ${seco.toFixed(2)}`;
-            grafico(["Producción","Seco"],[prod,seco]);
-        }
+        res.innerHTML = `
+            🔵 Hidrometalurgia<br><br>
+            Cobre contenido: ${contenido.toFixed(2)} t<br>
+            Cobre recuperado: ${recuperado.toFixed(2)} t<br>
+            Consumo ácido: ${consumo.toFixed(2)} kg/t
+        `;
     }
 
-    if (calc === "balance") {
-        let F = parseFloat(document.getElementById("F").value);
-        let C = parseFloat(document.getElementById("C").value);
+    // PIROMETALURGIA
+    if (el === "Cu" && proceso === "piro") {
+        let ley = parseFloat(document.getElementById("ley").value);
+        let leyC = parseFloat(document.getElementById("leyC").value);
+        let ton = parseFloat(document.getElementById("ton").value);
+        let rec = parseFloat(document.getElementById("rec").value);
 
-        let T = F - C;
+        let contenido = ton * (ley / 100);
+        let recuperado = contenido * (rec / 100);
 
-        res.innerHTML = `Relave: ${T}`;
-        grafico(["F","C","T"],[F,C,T]);
+        res.innerHTML = `
+            🔴 Pirometalurgia<br><br>
+            Cobre contenido: ${contenido.toFixed(2)} t<br>
+            Cobre recuperado: ${recuperado.toFixed(2)} t<br>
+            Ley concentrado: ${leyC} %
+        `;
+    }
+
+    if (el === "Ca") {
+        let ton = parseFloat(document.getElementById("ton").value);
+        res.innerHTML = `Producción caliza: ${ton} t`;
+    }
+
+    if (el === "Na") {
+        let ton = parseFloat(document.getElementById("ton").value);
+        res.innerHTML = `Producción sal: ${ton} t`;
     }
 }
 
 // LIMPIAR
 function limpiar() {
     document.getElementById("resultado").innerHTML = "";
-    if (chart) chart.destroy();
-    mostrarInputs();
-}
-
-// GRAFICO
-function grafico(labels,data) {
-    const ctx = document.getElementById("grafico").getContext("2d");
-    if(chart) chart.destroy();
-
-    chart = new Chart(ctx,{
-        type:"bar",
-        data:{labels:labels,datasets:[{data:data}]}
-    });
+    inputsDiv.innerHTML = "";
 }
 
 // CONVERSOR
-function convertir(){
-    let v = parseFloat(valor.value);
-    let u = unidad.value;
+function convertir() {
+    let v = parseFloat(document.getElementById("valor").value);
+    let u = document.getElementById("unidad").value;
 
-    if(u==="porcentaje"){
-        conversion.innerHTML = v + "% = " + (v*10000) + " ppm";
+    if (u === "porcentaje") {
+        document.getElementById("conversion").innerHTML =
+            v + "% = " + (v * 10000) + " ppm";
     } else {
-        conversion.innerHTML = v + " ppm = " + (v/10000) + "%";
+        document.getElementById("conversion").innerHTML =
+            v + " ppm = " + (v / 10000) + "%";
     }
-}
-
-// PROCESOS
-function cargarProcesos(){
-    let el = elemento.value;
-    proceso.innerHTML = "<option>Selecciona proceso</option>";
-
-    if(el==="Cu"){
-        proceso.innerHTML += `<option value="lix">Lixiviación</option>`;
-        proceso.innerHTML += `<option value="fun">Fundición</option>`;
-    }
-
-    if(el==="Ca"){
-        proceso.innerHTML += `<option value="cal">Calcinación</option>`;
-    }
-
-    if(el==="Na"){
-        proceso.innerHTML += `<option value="eva">Evaporación</option>`;
-    }
-}
-
-function mostrarProceso(){
-    let p = proceso.value;
-
-    let info = {
-        lix:"Lixiviación con ácido sulfúrico",
-        fun:"Fundición a alta temperatura",
-        cal:"Transformación CaCO3 → CaO",
-        eva:"Evaporación solar de sal"
-    };
-
-    infoProceso.innerHTML = info[p] || "";
 }
