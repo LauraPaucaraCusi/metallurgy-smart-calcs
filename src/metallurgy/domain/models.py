@@ -21,8 +21,7 @@ class Proceso(str, Enum):
 class ResultadoHidro:
     cobre_contenido_t: float
     cobre_recuperado_t: float
-    cobre_recuperado_kg: float
-    consumo_especifico_acido_kg_cu: float
+    consumo_acido_kg_t: float
 
 
 @dataclass(frozen=True)

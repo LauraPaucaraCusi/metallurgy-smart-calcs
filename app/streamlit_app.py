@@ -7,8 +7,6 @@ import streamlit as st
 from src.metallurgy.domain.calculations import (
     cobre_hidrometalurgia,
     cobre_pirometalurgia,
-    costo_acido_usd,
-    margen_operativo_bruto_usd,
     porcentaje_a_ppm,
     ppm_a_porcentaje,
     produccion_caliza,
@@ -23,8 +21,8 @@ from src.metallurgy.services.market_data import (
 
 
 def _grafico_sensibilidad(ton: float, ley: float) -> None:
-    recuperaciones: list[int] = list(range(50, 101, 5))
-    recuperado_t: list[float] = [ton * (ley / 100.0) * (r / 100.0) for r in recuperaciones]
+    recuperaciones = list(range(50, 101, 5))
+    recuperado_t = [ton * (ley / 100.0) * (r / 100.0) for r in recuperaciones]
     df = pd.DataFrame({"Recuperación (%)": recuperaciones, "Cobre recuperado (t)": recuperado_t})
     fig = px.line(df, x="Recuperación (%)", y="Cobre recuperado (t)", markers=True, title="Sensibilidad de cobre recuperado")
     st.plotly_chart(fig, use_container_width=True)
@@ -61,25 +59,14 @@ def ui_streamlit() -> None:
                 acido = st.number_input("Ácido (kg)", min_value=0.0, step=1.0)
                 if st.button("Calcular", key="calc_hidro"):
                     r = cobre_hidrometalurgia(ley, ton, rec, acido)
-                    try:
-                        precio_lb: float = obtener_precio_cobre_usd_por_lb()
-                        st.caption("Precio de cobre obtenido desde Yahoo Finance (HG=F).")
-                    except RuntimeError:
-                        precio_lb = 4.00
-                        st.warning("No se pudo consultar Yahoo Finance. Se usa precio por defecto: USD 4.00/lb")
-
-                    ingreso_bruto_usd: float = valor_proyectado_usd(r.cobre_recuperado_t, precio_lb)
-                    costo_acido_total_usd: float = costo_acido_usd(acido)
-                    margen_bruto_usd: float = margen_operativo_bruto_usd(ingreso_bruto_usd, costo_acido_total_usd)
+                    precio_lb = obtener_precio_cobre_usd_por_lb()
+                    valor_usd = valor_proyectado_usd(r.cobre_recuperado_t, precio_lb)
                     st.markdown("🔵 **Hidrometalurgia**")
                     st.write(f"Cobre contenido: {r.cobre_contenido_t:.2f} t")
                     st.write(f"Cobre recuperado: {r.cobre_recuperado_t:.2f} t")
-                    st.write(f"Cobre recuperado: {r.cobre_recuperado_kg:,.2f} kg")
-                    st.write(f"Consumo específico de ácido: {r.consumo_especifico_acido_kg_cu:.4f} kg ácido/kg Cu")
-                    st.write(f"Precio cobre aplicado: USD {precio_lb:.4f}/lb")
-                    st.write(f"Ingreso bruto por cobre: USD {ingreso_bruto_usd:,.2f}")
-                    st.write(f"Costo del ácido consumido: USD {costo_acido_total_usd:,.2f}")
-                    st.write(f"Margen operativo bruto: USD {margen_bruto_usd:,.2f}")
+                    st.write(f"Consumo ácido: {r.consumo_acido_kg_t:.2f} kg/t")
+                    st.write(f"Precio cobre API: USD {precio_lb:.4f}/lb")
+                    st.write(f"Valor económico proyectado: USD {valor_usd:,.2f}")
                     st.caption(f"Conversión usada: 1 t = {LB_PER_METRIC_TON:.4f} lb")
                     _grafico_sensibilidad(ton, ley)
 
@@ -90,20 +77,14 @@ def ui_streamlit() -> None:
                 rec = st.number_input("Recuperación (%)", min_value=0.0, step=0.1)
                 if st.button("Calcular", key="calc_piro"):
                     r = cobre_pirometalurgia(ley, ley_c, ton, rec)
-                    try:
-                        precio_lb: float = obtener_precio_cobre_usd_por_lb()
-                        st.caption("Precio de cobre obtenido desde Yahoo Finance (HG=F).")
-                    except RuntimeError:
-                        precio_lb = 4.00
-                        st.warning("No se pudo consultar Yahoo Finance. Se usa precio por defecto: USD 4.00/lb")
-
-                    ingreso_bruto_usd: float = valor_proyectado_usd(r.cobre_recuperado_t, precio_lb)
+                    precio_lb = obtener_precio_cobre_usd_por_lb()
+                    valor_usd = valor_proyectado_usd(r.cobre_recuperado_t, precio_lb)
                     st.markdown("🔴 **Pirometalurgia**")
                     st.write(f"Cobre contenido: {r.cobre_contenido_t:.2f} t")
                     st.write(f"Cobre recuperado: {r.cobre_recuperado_t:.2f} t")
                     st.write(f"Ley concentrado: {r.ley_concentrado_pct:.2f} %")
-                    st.write(f"Precio cobre aplicado: USD {precio_lb:.4f}/lb")
-                    st.write(f"Ingreso bruto por cobre: USD {ingreso_bruto_usd:,.2f}")
+                    st.write(f"Precio cobre API: USD {precio_lb:.4f}/lb")
+                    st.write(f"Valor económico proyectado: USD {valor_usd:,.2f}")
                     st.caption(f"Conversión usada: 1 t = {LB_PER_METRIC_TON:.4f} lb")
                     _grafico_sensibilidad(ton, ley)
 
